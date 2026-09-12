@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolinomLab SMA - Teorema Sisa & Teorema Faktor Interaktif</title>
+  <meta name="description" content="Aplikasi web interaktif pembelajaran matematika SMA materi polinomial, teorema sisa, teorema faktor, skema Horner, dan pembagian bersusun.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX for Beautiful Math Formula Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-square-root-variable"></i>
+        </div>
+        <div>
+          <div class="brand-title">PolinomLab SMA</div>
+          <span class="brand-subtitle">Laboratorium Interaktif Teorema Sisa & Teorema Faktor</span>
+        </div>
+      </a>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab-btn active" data-tab="calculator">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Kalkulator & Analisis</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="theory">
+          <i class="fa-solid fa-book-open"></i>
+          <span>Materi & Teorema</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="quiz">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Kuis & Latihan</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="worksheet">
+          <i class="fa-solid fa-file-lines"></i>
+          <span>Lembar Kerja (LKPD)</span>
+        </button>
+      </nav>
+
+      <!-- Action Controls -->
+      <div class="header-actions">
+        <button id="soundToggle" class="btn-icon" title="Toggle Efek Suara">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+        <button id="themeToggle" class="btn-icon" title="Toggle Mode Gelap/Terang">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="main-content">
+
+    <!-- ==================== TAB 1: KALKULATOR & EKSPLORASI ==================== -->
+    <section id="tab-calculator" class="tab-pane active">
+      
+      <!-- Top Grid: Input & Result Summary -->
+      <div class="grid-2" style="margin-bottom: 1.5rem;">
+        
+        <!-- Input Form Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fa-solid fa-pen-to-square"></i> Input Polinomial & Pembagi
+            </h2>
+          </div>
+
+          <!-- Input f(x) -->
+          <div class="form-group">
+            <label class="form-label" for="inputFx">
+              Fungsi Polinomial $f(x)$
+              <span class="form-sublabel">(Suku banyak yang dibagi)</span>
+            </label>
+            <div class="input-group">
+              <span class="input-prefix">f(x) =</span>
+              <input type="text" id="inputFx" class="form-input" value="x^3 - 2x^2 - 5x + 6" placeholder="Contoh: 2x^3 - 4x^2 + 5x - 7">
+            </div>
+          </div>
+
+          <!-- Input g(x) -->
+          <div class="form-group">
+            <label class="form-label" for="inputGx">
+              Fungsi Pembagi $g(x)$ atau Nilai $x = k$
+              <span class="form-sublabel">(Bentuk $x - k$, $ax + b$, atau angka $k$)</span>
+            </label>
+            <div class="input-group">
+              <span class="input-prefix">g(x) =</span>
+              <input type="text" id="inputGx" class="form-input" value="x - 3" placeholder="Contoh: x - 3 atau 2x + 1 atau 3">
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button id="btnCalculate" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Hitung & Analisis Sekarang
+          </button>
+
+          <!-- Quick Presets -->
+          <div style="margin-top: 1.25rem;">
+            <label class="form-label" style="font-size: 0.8rem; color: var(--text-muted);">Contoh Soal Siap Pakai:</label>
+            <div class="presets-container">
+              <span class="preset-chip" data-fx="x^3 - 2x^2 - 5x + 6" data-gx="x - 3">
+                <i class="fa-solid fa-bolt"></i> Kasus Faktor (S = 0)
+              </span>
+              <span class="preset-chip" data-fx="2x^3 - 4x^2 + 3x - 5" data-gx="x - 2">
+                <i class="fa-solid fa-bolt"></i> Kasus Sisa (S ≠ 0)
+              </span>
+              <span class="preset-chip" data-fx="2x^4 - 3x^3 + 5x - 2" data-gx="2x - 1">
+                <i class="fa-solid fa-bolt"></i> Pembagi (2x - 1)
+              </span>
+              <span class="preset-chip" data-fx="x^4 - 5x^2 + 4" data-gx="x + 2">
+                <i class="fa-solid fa-bolt"></i> Polinomial Derajat 4
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary & Factor Theorem Verdict Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fa-solid fa-square-check"></i> Hasil Analisis Teorema
+            </h2>
+            <div id="factorBadge" class="factor-badge is-factor">
+              <i class="fa-solid fa-check-circle"></i> FAKTOR DARI f(x)
+            </div>
+          </div>
+
+          <!-- Hero Display -->
+          <div class="summary-hero">
+            <div id="summaryLatex" class="math-display"></div>
+            <div style="display: flex; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap;">
+              <div id="remainderVal" style="background: var(--bg-card); padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <strong>Sisa S = 0</strong>
+              </div>
+              <div id="quotientVal" style="background: var(--bg-card); padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <strong>Hasil Bagi H(x) = x² + x - 2</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Educational Explanation Note -->
+          <div id="factorTheoremNote" style="margin-top: 0.5rem; line-height: 1.6;"></div>
+        </div>
+
+      </div>
+
+      <!-- Step-by-Step Breakdown Section -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fa-solid fa-list-ol"></i> Penjabaran Langkah Perhitungan
+          </h2>
+          <div class="method-nav">
+            <button class="method-btn active" data-method="horner">
+              <i class="fa-solid fa-table-cells-large"></i> Skema Horner
+            </button>
+            <button class="method-btn" data-method="substitusi">
+              <i class="fa-solid fa-calculator"></i> Teorema Sisa (Substitusi)
+            </button>
+            <button class="method-btn" data-method="porogapit">
+              <i class="fa-solid fa-divide"></i> Pembagian Bersusun
+            </button>
+          </div>
+        </div>
+
+        <!-- Method Content 1: Horner -->
+        <div id="method-horner" class="method-content active">
+          <div id="hornerContainer"></div>
+        </div>
+
+        <!-- Method Content 2: Substitusi -->
+        <div id="method-substitusi" class="method-content">
+          <div id="substitutionContainer"></div>
+        </div>
+
+        <!-- Method Content 3: Porogapit -->
+        <div id="method-porogapit" class="method-content">
+          <div id="porogapitContainer"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Grid: Factor Finder & Graph Visualizer -->
+      <div class="grid-2">
+        <!-- Factor Finder Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fa-solid fa-key"></i> Pencari Semua Faktor Linier $f(x)$
+            </h2>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            Berdasarkan <strong>Teorema Faktor</strong> dan uji akar rasional $\pm \frac{p}{q}$, berikut adalah seluruh pembuat nol / akar rasional dari $f(x)$:
+          </p>
+          <div id="rootsListContainer"></div>
+        </div>
+
+        <!-- Graph Visualizer Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fa-solid fa-chart-line"></i> Visualisasi Kurva Polinomial
+            </h2>
+          </div>
+          <div class="canvas-container">
+            <canvas id="polynomialCanvas"></canvas>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+            Titik pada grafik menunjukkan posisi evaluasi $(k, f(k))$. Jika titik berada tepat di sumbu-X ($y=0$), maka nilai tersebut adalah <strong>akar / faktor</strong>.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 2: MATERI & TEOREMA ==================== -->
+    <section id="tab-theory" class="tab-pane">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fa-solid fa-book-bookmark"></i> Rangkuman Materi: Polinomial Matematika SMA
+          </h2>
+        </div>
+        <p style="font-size: 1rem; color: var(--text-muted);">
+          Polinomial (suku banyak) adalah bentuk aljabar yang memuat satu variabel berpangkat bilangan bulat non-negatif. Secara umum ditulis sebagai:
+          $$f(x) = a_n x^n + a_{n-1} x^{n-1} + \dots + a_1 x + a_0$$
+        </p>
+      </div>
+
+      <div class="concept-grid">
+        <!-- Teorema Sisa 1 -->
+        <div class="concept-card">
+          <span class="concept-badge">Teorema Sisa I</span>
+          <h3 class="concept-title">Pembagi Berbentuk $(x - k)$</h3>
+          <p>Jika suku banyak $f(x)$ berderajat $n$ dibagi oleh $(x - k)$, maka sisa pembagiannya adalah:</p>
+          <div class="concept-box">
+            <strong>$$S = f(k)$$</strong>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">
+            <em>Artinya: Sisa pembagian dapat diperoleh secara langsung dengan mensubstitusikan nilai $x = k$ ke dalam fungsi $f(x)$.</em>
+          </p>
+        </div>
+
+        <!-- Teorema Sisa 2 -->
+        <div class="concept-card">
+          <span class="concept-badge">Teorema Sisa II</span>
+          <h3 class="concept-title">Pembagi Berbentuk $(ax + b)$</h3>
+          <p>Jika suku banyak $f(x)$ dibagi oleh $(ax + b)$, maka sisa pembagiannya adalah:</p>
+          <div class="concept-box">
+            <strong>$$S = f\left(-\frac{b}{a}\right)$$</strong>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">
+            <em>Hasil bagi sebenarnya adalah $H(x) = \frac{Q(x)}{a}$, di mana $Q(x)$ adalah koefisien hasil bagi dari skema Horner.</em>
+          </p>
+        </div>
+
+        <!-- Teorema Sisa 3 -->
+        <div class="concept-card">
+          <span class="concept-badge">Teorema Sisa III</span>
+          <h3 class="concept-title">Pembagi Berderajat 2 $(x - a)(x - b)$</h3>
+          <p>Jika suku banyak $f(x)$ dibagi oleh pembagi kuadrat, maka sisa pembagian maksimal berderajat 1:</p>
+          <div class="concept-box">
+            <strong>$$S(x) = px + q$$</strong>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">
+            <em>Nilai $p$ dan $q$ dicari dengan menyusun sistem persamaan linier dari $f(a) = pa + q$ dan $f(b) = pb + q$.</em>
+          </p>
+        </div>
+
+        <!-- Teorema Faktor -->
+        <div class="concept-card" style="border: 2px solid var(--success);">
+          <span class="concept-badge" style="background: var(--success-subtle); color: var(--success-dark);">Kunci Konsep</span>
+          <h3 class="concept-title" style="color: var(--success-dark);">Teorema Faktor</h3>
+          <p>Suatu bentuk linier $(x - k)$ merupakan <strong>faktor</strong> dari suku banyak $f(x)$ jika dan hanya jika:</p>
+          <div class="concept-box" style="border-left-color: var(--success);">
+            <strong>$$f(k) = 0 \iff S = 0$$</strong>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">
+            <em>Konsep ini digunakan untuk mencari akar-akar persamaan polinomial dan memfaktorkan suku banyak berderajat tinggi.</em>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: KUIS & LATIHAN SISWA ==================== -->
+    <section id="tab-quiz" class="tab-pane">
+      <div class="card quiz-card">
+        <!-- Quiz Header & Score Bar -->
+        <div class="quiz-header">
+          <h2 class="card-title">
+            <i class="fa-solid fa-trophy"></i> Latihan Soal Interaktif Siswa
+          </h2>
+          <div class="quiz-stats">
+            <div class="stat-item">
+              <div class="stat-icon score"><i class="fa-solid fa-star"></i></div>
+              <span>Skor: <strong id="quizScore">0</strong></span>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon streak"><i class="fa-solid fa-fire"></i></div>
+              <span>Streak: <strong id="quizStreak">0</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Box -->
+        <div id="quizQuestionBox" class="quiz-question-box"></div>
+
+        <!-- Options Container -->
+        <div id="quizOptions" class="quiz-options"></div>
+
+        <!-- Feedback & Explanation Box -->
+        <div id="quizFeedback" class="quiz-feedback"></div>
+
+        <!-- Next Question Action Button -->
+        <div style="text-align: right;">
+          <button id="quizNextBtn" class="btn btn-primary" style="display: none;">
+            <span>Soal Berikutnya</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: LEMBAR KERJA PESERTA DIDIK (LKPD) ==================== -->
+    <section id="tab-worksheet" class="tab-pane">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fa-solid fa-print"></i> Generator Lembar Kerja Peserta Didik (LKPD)
+          </h2>
+          <button id="btnGenerateLKS" class="btn btn-secondary no-print">
+            <i class="fa-solid fa-arrows-rotate"></i> Acak Ulang Soal LKPD
+          </button>
+        </div>
+        <p class="no-print" style="color: var(--text-muted); font-size: 0.95rem;">
+          Guru dapat langsung mencetak lembar kerja ini untuk tugas mandiri/kelompok di kelas atau menyimpannya sebagai format PDF.
+        </p>
+      </div>
+
+      <!-- Printable LKPD Output -->
+      <div id="lksContainer"></div>
+    </section>
+
+  </main>
+
+  <!-- Main JavaScript Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
